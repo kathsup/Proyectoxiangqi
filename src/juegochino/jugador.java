@@ -29,10 +29,9 @@ public class jugador {
         return sdf.format(fechaIngreso.getTime());
     }
     
-    public String mostrarInfo(){
-    return ("Usuario: "+username+"\nPuntos: "+puntos+"\nFecha: "+getFechaIngresoFormateada()+"\nActivo: "+activo);
-    
-    
+    public String mostrarInfo() {
+        return ("Usuario: " + username + "\nPuntos: " + puntos + "\nFecha: " + getFechaIngresoFormateada() + "\nActivo: " + activo);
+
     }
 
     @Override
@@ -69,6 +68,12 @@ public class jugador {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    
 
     // Método para agregar un log de partida.
     public void agregarLogPartida(String resultado) {

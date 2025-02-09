@@ -74,19 +74,39 @@ public class gestionJugadores {
         
     }
     
+    public boolean cambiarP(jugador usser, String vieja, String nueva){
+    
+        
+        if (vieja.isEmpty() || nueva.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Error. No debe dejar ningún campo vacío.");
+        return false;
+        }
+      
 
+    if (usser == null) {
+        JOptionPane.showMessageDialog(null, "Error. El usuario no existe.");
+        return false; 
+    }
+
+    
+    if (!usser.getPassword().equals(vieja)) {
+        JOptionPane.showMessageDialog(null, "Error. La contraseña actual es incorrecta.");
+        return false; 
+    }
+
+   
+    if (nueva.length() != 5) {
+        JOptionPane.showMessageDialog(null, "Error. La nueva contraseña debe tener exactamente 5 caracteres.");
+        return false; 
+    }
+
+    
+    usser.setPassword(nueva);
+    return true; 
+    
+    
+    }
+    
 }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
