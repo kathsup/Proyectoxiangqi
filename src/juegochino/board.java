@@ -254,7 +254,7 @@ public class board extends JFrame {
     
     public void cerrar() {
         dispose(); // Cierra la ventana del tablero
-        // jugador nuevoJugador = gestorDeJugadores.buscarJugador(usser); // Obtener el jugador recién creado
+         
          new principal(gestorDeJugadores, jugadorRojo).setVisible(true); 
     }
 
@@ -282,3 +282,4 @@ public class board extends JFrame {
 
 //COSAS A REVISAR 
 //Movimientos de cada pieza, captura de cada pieza 
+//QUE NO COMIENCE EL JUEGO SI NO HAY OTRO JUGADOR SELECCIONADO

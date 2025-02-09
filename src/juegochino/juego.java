@@ -135,9 +135,9 @@ tablero[9][8]=new carroGuerra(9,8,false);
     public void mostrarTurno() {
         
         if (esTurnoRojo) {
-            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+"rojo");
+            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorRojo.getUsername());
         } else {
-            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername()+"negro");
+            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorNegro.getUsername());
         }
     }
 
@@ -184,5 +184,14 @@ tablero[9][8]=new carroGuerra(9,8,false);
         
     }
     
+    /*public String mostrarInfo(){
+    
+        return ("Usuario: "+jugadorRojo.getUsername()+"\nPuntos: "+jugadorRojo.getPuntos()
+                +"\nFecha: "+jugadorRojo.getFechaIngresoFormateada()
+                +"\nActivo: "+jugadorRojo.isActivo()
+                );
+       
+    
+    }*/
     
 }

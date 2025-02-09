@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class principal extends JFrame {
@@ -17,6 +19,7 @@ private CardLayout cardLayout;
     private JPanel panelCentral;
     private jugador jugador;
     private gestionJugadores gestorJugadores;
+    private juego j; 
 
     public principal(gestionJugadores gestorJugadores, jugador jugador) {
         this.jugador = jugador;
@@ -107,8 +110,16 @@ private CardLayout cardLayout;
         ultimosLogsPanel.add(new JLabel("Aquí están los Últimos Logs"));
         JPanel cambiarContrasenaPanel = new JPanel();
         cambiarContrasenaPanel.add(new JLabel("Aquí puedes cambiar tu Contraseña"));
+        
         JPanel verDatos = new JPanel();
-        verDatos.add(new JLabel("Ver mis datos"));
+        verDatos.setLayout(null);
+        JLabel LD = new JLabel("MIS DATOS");
+        LD.setBounds(100, 10, 100, 50);
+        verDatos.add(LD);
+        JTextArea info = new JTextArea();
+        info.setBounds(50, 50, 500, 500);
+        info.setText(jugador.mostrarInfo());
+        verDatos.add(info);
         
 
         // Añadir subpaneles al panel derecho

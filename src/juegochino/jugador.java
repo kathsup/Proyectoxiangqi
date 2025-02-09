@@ -28,6 +28,12 @@ public class jugador {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Formato de día/mes/año
         return sdf.format(fechaIngreso.getTime());
     }
+    
+    public String mostrarInfo(){
+    return ("Usuario: "+username+"\nPuntos: "+puntos+"\nFecha: "+getFechaIngresoFormateada()+"\nActivo: "+activo);
+    
+    
+    }
 
     @Override
     public String toString() {
