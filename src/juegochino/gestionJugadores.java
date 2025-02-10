@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 public class gestionJugadores {
     public jugador[] jugadores;
-    private int numjugadores; 
+    public int numjugadores; 
     
     public gestionJugadores() {
         jugadores = new jugador[100];
@@ -106,6 +106,72 @@ public class gestionJugadores {
     
     
     }
+    
+    public boolean eliminarCuenta(jugador loggedInUser, String password) {
+        
+   
+    if (loggedInUser == null) {
+        JOptionPane.showMessageDialog(null, "Error. No hay un usuario loggeado.");
+        return false;
+    }
+
+    
+    if (!loggedInUser.getPassword().equals(password)) {
+        JOptionPane.showMessageDialog(null, "Error. Contraseña incorrecta.");
+        return false;
+    }
+
+    // Buscar la posición del usuario en el arreglo
+    for (int i = 0; i < numjugadores; i++) {
+        if (jugadores[i] != null && jugadores[i].getUsername().equals(loggedInUser.getUsername())) {
+            jugadores[i] = null;
+
+            // Ajustar el arreglo para mover los otros jugadores
+            for (int j = i; j < numjugadores - 1; j++) {
+                jugadores[j] = jugadores[j + 1];  // mover los jugadores a la izquierda
+            }
+            jugadores[numjugadores - 1] = null; // Limpiar el último
+            numjugadores--; // Disminuir el contador de jugadores
+            JOptionPane.showMessageDialog(null, "Cuenta eliminada con éxito.");
+
+            return true;
+        }
+    }
+
+    // Si no encuentra el jugador
+    JOptionPane.showMessageDialog(null, "Error. No se pudo eliminar el usuario.");
+    return false;
+}
+    
+     public void ordenarJugadoresPorPuntos() {
+        // Usamos el algoritmo de burbuja para ordenar de mayor a menor
+        for (int i = 0; i < numjugadores - 1; i++) {
+            for (int j = 0; j < numjugadores - i - 1; j++) {
+                // Si el jugador j tiene menos puntos que el jugador j+1, los intercambiamos
+                if (jugadores[j].getPuntos() < jugadores[j + 1].getPuntos()) {
+                    // Intercambiar jugadores[j] con jugadores[j + 1]
+                    jugador temp = jugadores[j];
+                    jugadores[j] = jugadores[j + 1];
+                    jugadores[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    // Método para mostrar el ranking de jugadores
+    public void mostrarRanking() {
+        // Ordena el arreglo de jugadores por puntos
+        ordenarJugadoresPorPuntos();
+
+        // Mostrar el ranking
+        System.out.println("RANKING DE JUGADORES:");
+        for (int i = 0; i < numjugadores; i++) {
+            if (jugadores[i] != null) {
+                System.out.println((i + 1) + " - " + jugadores[i].getUsername() + " - " + jugadores[i].getPuntos() + " puntos");
+            }
+        }
+    }
+    
     
 }
     

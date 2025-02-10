@@ -95,8 +95,8 @@ public class log extends JFrame {
   
   ActionListener s = new ActionListener(){
   public void actionPerformed(ActionEvent ae){
-        //currentFrame.dispose();
-        System.exit(0);
+        currentFrame.dispose();
+       // System.exit(0);
 }
   };
   salir.addActionListener(s);

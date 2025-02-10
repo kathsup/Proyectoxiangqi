@@ -21,7 +21,7 @@ public class board extends JFrame {
 
     public JPanel panel1, panel2;
     private JButton[][] botones;
-    private final juego juego;
+    public  juego juego;
     private piezas piezaSeleccionada = null; // para almacenar la pieza seleccionada
     private int filaOrigen, colOrigen;
 
@@ -40,9 +40,9 @@ public class board extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.jugadorRojo = jugadorLogueado; // El jugador logueado es el rojo
         this.gestorDeJugadores = gestor; // Asignar el gestor de jugadores
-        juego = new juego(this,jugadorRojo, jugadorNegro);
+        //juego = new juego(this,jugadorRojo, jugadorNegro);
         iniciarComponentes();
-        juego.mostrarTurno();
+        //juego.mostrarTurno();
 
         infoJugadores.append("Jugador Rojo: " + jugadorRojo.getUsername() + "\n");
        
@@ -51,10 +51,10 @@ public class board extends JFrame {
     private void iniciarComponentes() {
         iniciarpanel1();
         iniciarpanel2();
-        juego.inicializarTablero();
-        crearBotones();
-        colocarPiezas();
-        colocarBtnRetiro();
+        //juego.inicializarTablero();
+        //crearBotones();
+        //colocarPiezas();
+        //colocarBtnRetiro();
         crearJComboBoxJugadores();
         colocarInfoPaneles();
     }
@@ -127,31 +127,46 @@ public class board extends JFrame {
     }
     
     private void crearJComboBoxJugadores() {
-        // Crear el JComboBox para seleccionar el jugador oponente (jugador negro)
-        JComboBox<jugador> listaJugadores = new JComboBox<>();
-        listaJugadores.setBounds(533, 100, 135, 30);
+    // Crear el JComboBox para seleccionar el jugador oponente (jugador negro)
+    JComboBox<jugador> listaJugadores = new JComboBox<>();
+    listaJugadores.setBounds(533, 100, 135, 30);
 
-        // Llenar el JComboBox con los jugadores disponibles (excluyendo al jugador rojo)
-        for (jugador j : gestorDeJugadores.jugadores) {
-            if (j != null && !j.equals(jugadorRojo)) {
-                listaJugadores.addItem(j);
-            }
+    // Llenar el JComboBox con los jugadores disponibles (excluyendo al jugador rojo)
+    for (jugador j : gestorDeJugadores.jugadores) {
+        if (j != null && !j.equals(jugadorRojo)) {
+            listaJugadores.addItem(j);
         }
+    }
 
-        // Añadir la lista al panel
-        panel1.add(listaJugadores);
+    if (listaJugadores.getItemCount() == 0) {
+        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles. Regresando al menú principal.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
+        cerrar(); // Método para cerrar la ventana actual y regresar al menú principal
+        return; // Salir del método
+    }
+    
+    // Añadir la lista al panel
+    panel1.add(listaJugadores);
 
-        // Manejar la selección del oponente
-         listaJugadores.addActionListener(e -> {
-        if (jugadorNegro == null) { // Solo permitir seleccionar una vez
-            jugadorNegro = (jugador) listaJugadores.getSelectedItem();
+    // Manejar la selección del oponente
+    listaJugadores.addActionListener(e -> {
+        jugadorNegro = (jugador) listaJugadores.getSelectedItem();
+        if (jugadorNegro != null) {
             // Mostrar el jugador negro en el JTextArea de información
             infoJugadores.append("Jugador Negro: " + jugadorNegro.getUsername() + "\n");
             // Desactivar el JComboBox para evitar cambios de jugador
             listaJugadores.setEnabled(false);
+
+            // Crear el objeto juego después de seleccionar el jugador negro
+            this.juego = new juego(this, jugadorRojo, jugadorNegro);
+            this.juego.inicializarTablero();
+            this.juego.mostrarTurno();
+            crearBotones(); // Crea los botones después de inicializar el juego
+            colocarPiezas();
+            colocarBtnRetiro();
+            //nuevoJuego.iniciarJuego(); // Si tienes algún método para comenzar el juego
         }
     });
-    }
+}
 
     private void colocarInfoPaneles() {
         // JTextArea para mostrar la info de los jugadores
@@ -283,3 +298,8 @@ public class board extends JFrame {
 //COSAS A REVISAR 
 //Movimientos de cada pieza, captura de cada pieza 
 //QUE NO COMIENCE EL JUEGO SI NO HAY OTRO JUGADOR SELECCIONADO
+//clase y metodos finales(1)
+//2 recursivas
+//una interfaz
+//NO EXCEPTIONS
+//

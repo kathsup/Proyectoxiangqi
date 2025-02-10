@@ -12,10 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+import javax.swing.table.DefaultTableModel;
 
 public class principal extends JFrame {
 private CardLayout cardLayout;
@@ -24,6 +27,7 @@ private CardLayout cardLayout;
     private gestionJugadores gestorJugadores;
     private juego j; 
     JPanel panelDerecho;
+    private JTable rankingTable;
 
     public principal(gestionJugadores gestorJugadores, jugador jugador) {
         this.jugador = jugador;
@@ -55,11 +59,25 @@ private CardLayout cardLayout;
         panelCentral.add(jugar, "Jugar");//agregar el panel de jugar a el panel central 
         getContentPane().add(panelCentral);//hacerlo visible 
         
-        comenzarP.addActionListener(e -> {
-        dispose();
-        // Abrir el tablero
-        board tablero = new board(jugador, gestorJugadores); // Crea el tablero con los jugadores
-        tablero.setVisible(true); // Haz visible el tablero
+       comenzarP.addActionListener(e -> {
+    // Verificar si hay jugadores disponibles (excluyendo al jugador rojo)
+    boolean hayOponentes = false;
+    for (jugador j : gestorJugadores.jugadores) {
+        if (j != null && !j.equals(jugador)) {
+            hayOponentes = true;
+            break;
+        }
+    }
+
+    if (!hayOponentes) {
+        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles. Regresando al menú principal.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
+        return; // Salir del método sin abrir el tablero
+    }
+
+    // Si hay oponentes, crear el tablero
+    dispose(); // Cerrar la ventana actual
+    board tablero = new board(jugador, gestorJugadores); // Crea el tablero con los jugadores
+    tablero.setVisible(true); // Haz visible el tablero
 });
         
         //agregar los botones de ajustes 
@@ -70,7 +88,7 @@ private CardLayout cardLayout;
         logout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose(); // Cierra el menú principal
-                new inicio(gestorJugadores).setVisible(true); // Abre el menú de login nuevamente
+                new inicio(gestorJugadores).setVisible(true); // Abre el menú de inicio 
             }
         });
         
@@ -183,13 +201,66 @@ private CardLayout cardLayout;
     
     public void ranking(){
     JPanel rankingPanel = new JPanel();
-    rankingPanel.add(new JLabel("Aquí está el Ranking"));
     panelDerecho.add(rankingPanel, "Ranking");
+    
+    gestorJugadores.ordenarJugadoresPorPuntos();
+
+        // Definir las columnas de la tabla
+        String[] columnNames = {"Posición", "Username", "Puntos"};
+
+        // Crear el modelo de la tabla
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        // Llenar el modelo de la tabla con los jugadores ordenados
+        for (int i = 0; i < gestorJugadores.numjugadores; i++) {
+            if (gestorJugadores.jugadores[i] != null) {
+                // Agregar una fila por cada jugador
+                Object[] row = {
+                    i + 1, // Posición
+                    gestorJugadores.jugadores[i].getUsername(), // Username
+                    gestorJugadores.jugadores[i].getPuntos() // Puntos
+                };
+                model.addRow(row);
+            }
+    
+    }
+        
+        
+        // Crear la tabla con el modelo
+        rankingTable = new JTable(model);
+        rankingTable.setFillsViewportHeight(true);
+
+        // Mostrar la tabla dentro del panel
+        JScrollPane scrollPane = new JScrollPane(rankingTable);
+        //panelDerecho.removeAll(); // Limpiar el panel antes de agregar el JTable
+        rankingPanel.add(scrollPane, BorderLayout.CENTER);
+        //panelDerecho.revalidate(); // Actualizar la interfaz
+        //panelDerecho.repaint();  
     }
     
+        
     public void ultimosLogs(){
     JPanel ultimosLogsPanel = new JPanel();
         ultimosLogsPanel.add(new JLabel("Aquí están los Últimos Logs"));
+          // Crear un JTextArea para mostrar los logs
+    JTextArea textAreaLogs = new JTextArea(10, 30); // 10 filas, 30 columnas
+    textAreaLogs.setEditable(false); // Los logs no serán editables por el usuario
+
+    // Obtener los logs del jugador
+    String[] logs = jugador.getLogPartidas();
+
+    // Recorrer los logs y añadirlos al JTextArea
+    for (String log : logs) {
+        if (log != null) {
+            textAreaLogs.append(log + "\n");
+        }
+    }
+
+    // Colocar el JTextArea dentro de un JScrollPane para permitir desplazamiento
+    JScrollPane scrollPane = new JScrollPane(textAreaLogs);
+
+    // Añadir el scrollPane al panel
+    ultimosLogsPanel.add(scrollPane, BorderLayout.CENTER);
     panelDerecho.add(ultimosLogsPanel, "Últimos Logs");
     }
     
@@ -268,13 +339,51 @@ private CardLayout cardLayout;
     public void borrarCuenta(){
     JPanel borrar = new JPanel();
     borrar.setLayout(null);
-    JLabel b = new JLabel("Borrar mi cuenta");
-    b.setBounds(100, 10, 100, 50);
-    borrar.add(b);
+  
+    JLabel etiqueta = new JLabel("BORRAR CUENTA");
+      borrar.add(etiqueta);//agregar etiqueta al panel
+      etiqueta.setBounds(250,50,300,50);//tamaño y posición de la etiqueta
+      etiqueta.setForeground(Color.MAGENTA);//ponerle color a las letras 
+      etiqueta.setFont(new Font("Tahoma",Font.BOLD,18));
     
+    JLabel contra = new JLabel("Password:");
+      borrar.add(contra);//agregar etiqueta al panel
+      contra.setBounds(200,180,300,50);//tamaño y posición de la etiqueta
+      contra.setForeground(Color.BLACK);//ponerle color a las letras 
+      contra.setFont(new Font("Tahoma",Font.BOLD,18));
+      
+      
+      JTextField c = new JTextField();
+      borrar.add(c);
+      c.setBounds(200, 220, 290, 37);
     
-    
-    
+    JButton cambiar = new JButton("BORRAR CUENTA");
+      cambiar.setBounds(260, 300, 180, 46);
+      borrar.add(cambiar);
+      
+        cambiar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String password = c.getText();
+                int confirmar = JOptionPane.showConfirmDialog(null, "Seguro deseas borrar tu cuenta?", "confirmar borrar", JOptionPane.YES_NO_OPTION);
+                if (confirmar == JOptionPane.YES_OPTION) {
+            boolean borrado = gestorJugadores.eliminarCuenta(jugador, password);
+
+            if (borrado) {
+                JOptionPane.showMessageDialog(null, "Se borró la cuenta correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
+                dispose(); // Cierra el menú principal
+                new inicio(gestorJugadores).setVisible(true); // Abre el menú de inicio
+            } else {
+                //las otras opciones
+            }
+        } else if (confirmar == JOptionPane.NO_OPTION) {
+            JOptionPane.showMessageDialog(null, "No se borró la cuenta.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            CardLayout cl = (CardLayout) panelDerecho.getLayout();
+            cl.show(panelDerecho, "Mi Cuenta");
+        }
+
+            }
+        });
     
     
     panelDerecho.add(borrar, "borrar");
@@ -283,4 +392,7 @@ private CardLayout cardLayout;
     }
     
     
+    
+    
 }
+

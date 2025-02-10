@@ -73,6 +73,9 @@ public class jugador {
         this.password = password;
     }
     
+     public String[] getLogPartidas() {
+        return logPartidas;
+    }
     
 
     // Método para agregar un log de partida.

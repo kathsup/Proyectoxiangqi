@@ -118,13 +118,7 @@ tablero[9][8]=new carroGuerra(9,8,false);
     }
     
     public void turno() {
-        
-       /* if (esTurnoRojo) {
-            System.out.println("Turno del rojo");
-        } else {
-            System.out.println("turno del negro");
-        }
-        esTurnoRojo = !esTurnoRojo;*/
+      
        if(!juegoTerminado){
        esTurnoRojo = !esTurnoRojo; // Alternar el turno
         mostrarTurno();
@@ -135,35 +129,43 @@ tablero[9][8]=new carroGuerra(9,8,false);
     public void mostrarTurno() {
         
         if (esTurnoRojo) {
-            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorRojo.getUsername());
+            btab.mostrarEnInfoMovimientos("Turno de rojo");
         } else {
-            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorNegro.getUsername());
+            btab.mostrarEnInfoMovimientos("Turno de negro");
         }
     }
 
     public boolean ganar(){
     
         if(reyR==0){
-            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername()+" GANÓ");
-           jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " GANÓ");
+            jugadorNegro.sumarPuntos(3); 
+            jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " GANÓ"); // Agregar log al jugador negro
+            jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " PERDIÓ contra " + jugadorNegro.getUsername()); // Log del perdedor
             juegoTerminado = true;
             finalizarJuego();
         }
         if(reyN==0){
-            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+" GANÓ");
+            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername() + " GANÓ");
             jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " GANÓ");
+            jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ contra " + jugadorRojo.getUsername());
             juegoTerminado = true;
             finalizarJuego();
         }
         if(esTurnoRojo && retiroPress){
            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " ha ganado.");
-            jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorNegro.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorNegro.agregarLogPartida(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " ha ganado.");
+            jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " PERDIÓ por retiro contra " + jugadorNegro.getUsername());
             juegoTerminado = true;
             finalizarJuego();
         }
         if(!esTurnoRojo && retiroPress){
-        btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername()+" se ha retirado. "+ jugadorRojo.getUsername()+ " ha ganado.");
+            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " ha ganado.");
             jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorRojo.agregarLogPartida(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " ha ganado.");
+            jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ por retiro contra " + jugadorRojo.getUsername() + " por retiro");
             juegoTerminado = true;
             finalizarJuego();
         
@@ -184,14 +186,8 @@ tablero[9][8]=new carroGuerra(9,8,false);
         
     }
     
-    /*public String mostrarInfo(){
     
-        return ("Usuario: "+jugadorRojo.getUsername()+"\nPuntos: "+jugadorRojo.getPuntos()
-                +"\nFecha: "+jugadorRojo.getFechaIngresoFormateada()
-                +"\nActivo: "+jugadorRojo.isActivo()
-                );
-       
     
-    }*/
+  
     
 }
