@@ -2,18 +2,27 @@ package juegochino;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+
 
 public class inicio extends JFrame {
     public JPanel panel; //crear panel como atributo 
     JFrame currentFrame = this; 
     private gestionJugadores gestorJugadores;
     private jugador jugador;
+    FondoPanel fondo = new FondoPanel();
+    private JPanel panelBotones;
+    
+     
     
     
   public inicio(gestionJugadores gestor){//creación de ventana
@@ -24,8 +33,8 @@ public class inicio extends JFrame {
   //setBounds(250,100,712,506);//une setsize y location, primero location y luego size, ancho/alto
   setLocationRelativeTo(null);      //pone la pantalla centrada
   setDefaultCloseOperation(EXIT_ON_CLOSE);//cerrar el programa con el boton
+  this.setContentPane(fondo);
   iniciarComponentes();
-       
   }  
   
   private void iniciarComponentes(){
@@ -34,16 +43,18 @@ public class inicio extends JFrame {
   }
   
   private void colocarEtiquetas(){
-  panel = new JPanel();// instanciar panel 
+      panel = new JPanel();// instanciar panel 
       panel.setLayout(null);
       this.getContentPane().add(panel);//agregar panel a la ventana
-      panel.setBackground(Color.PINK);//color del panel 
+      panel.setOpaque(false);
+      fondo.add(panel);
+      //panel.setBackground(Color.PINK);//color del panel 
       //panel.getContentPane().setBackground(new Color(0xEBB8DD)); HEX COLRS 
       
       JLabel etiqueta = new JLabel("Menú Inicio");
-      panel.add(etiqueta);//agregar etiqueta al panel
-      etiqueta.setBounds(225,50,300,50);//tamaño y posición de la etiqueta
-      etiqueta.setForeground(Color.MAGENTA);//ponerle color a las letras 
+      fondo.add(etiqueta);//agregar etiqueta al panel
+      etiqueta.setBounds(245,83,300,50);//tamaño y posición de la etiqueta
+      etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,36));
       
       
@@ -53,12 +64,18 @@ public class inicio extends JFrame {
   }
   
   private void colocarBotones(){
+  panelBotones = new JPanel();
+  panelBotones.setLayout(null);
+  panelBotones.setOpaque(false);
+  fondo.setLayout(null);
+  fondo.add(panelBotones);
+  
   JButton logIn = new JButton("LOG IN");//O usar set text 
-  logIn.setBounds(240, 150, 214, 46);
-  logIn.setForeground(Color.MAGENTA);
+  logIn.setBounds(240, 170, 214, 46);
+  logIn.setForeground(Color.WHITE);
   logIn.setFont(new Font("Tahoma",Font.BOLD,24));
-  logIn.setBackground(Color.decode("#d5adff"));
-  panel.add(logIn);
+  logIn.setBackground(Color.decode("#a1162b"));
+  fondo.add(logIn);
   
    logIn.addActionListener(new ActionListener() {
             @Override
@@ -69,11 +86,11 @@ public class inicio extends JFrame {
         });
   
   JButton crearPlayer = new JButton("CREAR PLAYER");//O usar set text 
-  crearPlayer.setBounds(240, 220, 214, 46);
-  crearPlayer.setForeground(Color.RED);
+  crearPlayer.setBounds(240, 240, 214, 46);
+  crearPlayer.setForeground(Color.WHITE);
   crearPlayer.setFont(new Font("Tahoma",Font.BOLD,22));
-  crearPlayer.setBackground(Color.decode("#ff94c2"));
-  panel.add(crearPlayer);
+  crearPlayer.setBackground(Color.decode("#a1162b"));
+  fondo.add(crearPlayer);
   
   crearPlayer.addActionListener(new ActionListener() {
             @Override
@@ -84,11 +101,11 @@ public class inicio extends JFrame {
         });
   
   JButton salir = new JButton("SALIR");//O usar set text 
-  salir.setBounds(240, 290, 214, 46);
-  salir.setForeground(Color.decode("#ac58f5"));
+  salir.setBounds(240, 310, 214, 46);
+  salir.setForeground(Color.WHITE);
   salir.setFont(new Font("Tahoma",Font.BOLD,24));
-  salir.setBackground(Color.decode("#00d9ce"));
-  panel.add(salir);
+  salir.setBackground(Color.decode("#a1162b"));
+  fondo.add(salir);
   
   ActionListener s = new ActionListener(){
   public void actionPerformed(ActionEvent ae){
@@ -102,6 +119,37 @@ public class inicio extends JFrame {
   
   }
   
+  /*public class PanelConFondo extends JPanel {
+        private Image fondo;
+
+        public PanelConFondo(String rutaImagen) {
+            fondo = new ImageIcon(rutaImagen).getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this); // Dibujar la imagen en todo el panel
+        }
+    }*/
+  
+  class FondoPanel extends JPanel{
+  
+      private Image imagen; 
+      
+      @Override
+      public void paintComponent(Graphics g){
+          super.paintComponent(g);
+          imagen = new ImageIcon(getClass().getResource("/imagenes/inicio.jpg")).getImage();
+          g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+          
+      
+      }
+      
+      
+      
+  
+  }
  
     
     

@@ -1,5 +1,7 @@
 package juegochino;
 
+import javax.swing.JOptionPane;
+
 public class juego {
 private piezas [][] tablero; 
 private static boolean esTurnoRojo=true;
@@ -138,23 +140,26 @@ tablero[9][8]=new carroGuerra(9,8,false);
     public boolean ganar(){
     
         if(reyR==0){
-            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " GANÓ");
+            JOptionPane.showMessageDialog(null, jugadorNegro.getUsername() + " VENCIO A "+jugadorRojo.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " VENCIO A "+jugadorRojo.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS");
             jugadorNegro.sumarPuntos(3); 
-            jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " GANÓ"); // Agregar log al jugador negro
+            jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " le GANO a "+ jugadorRojo.getUsername()); // Agregar log al jugador negro
             jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " PERDIÓ contra " + jugadorNegro.getUsername()); // Log del perdedor
             juegoTerminado = true;
             finalizarJuego();
         }
         if(reyN==0){
-            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername() + " GANÓ");
+            JOptionPane.showMessageDialog(null, jugadorRojo.getUsername() + " VENCIO A "+jugadorNegro.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername() + " VENCIO A "+jugadorNegro.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS");
             jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
-            jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " GANÓ");
+            jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " le GANO a "+ jugadorNegro.getUsername());
             jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ contra " + jugadorRojo.getUsername());
             juegoTerminado = true;
             finalizarJuego();
         }
         if(esTurnoRojo && retiroPress){
-           btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " ha ganado.");
+            JOptionPane.showMessageDialog(null, jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " HA GANADO 3 PUNTOS.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+           btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " HA GANADO 3 PUNTOS.");
             jugadorNegro.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
             jugadorNegro.agregarLogPartida(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " ha ganado.");
             jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " PERDIÓ por retiro contra " + jugadorNegro.getUsername());
@@ -162,7 +167,8 @@ tablero[9][8]=new carroGuerra(9,8,false);
             finalizarJuego();
         }
         if(!esTurnoRojo && retiroPress){
-            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " ha ganado.");
+            JOptionPane.showMessageDialog(null, jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " HA GANADO 3 PUNTOS.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " HA GANADO 3 PUNTOS.");
             jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
             jugadorRojo.agregarLogPartida(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " ha ganado.");
             jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ por retiro contra " + jugadorRojo.getUsername() + " por retiro");

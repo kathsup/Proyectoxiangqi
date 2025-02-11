@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +31,7 @@ private CardLayout cardLayout;
     private juego j; 
     JPanel panelDerecho;
     private JTable rankingTable;
+    FondoPanel fondo = new FondoPanel();
 
     public principal(gestionJugadores gestorJugadores, jugador jugador) {
         this.jugador = jugador;
@@ -36,6 +40,7 @@ private CardLayout cardLayout;
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        this.setContentPane(fondo);
         iniciarComponentes();
         setVisible(true); 
     }
@@ -47,17 +52,23 @@ private CardLayout cardLayout;
     
     public void primerPanel(){
     
-     cardLayout = new CardLayout();
+        cardLayout = new CardLayout();
         panelCentral = new JPanel();
         panelCentral.setLayout(cardLayout);
+        panelCentral.setOpaque(false);
+        fondo.add(panelCentral);
+        fondo.setLayout(null);
         
         JPanel jugar = new JPanel();//crear panel inicial con la parte de jugar y los botones de ajustes y log out
         jugar.setLayout(null);//para poder usar setbounds y moverlo a donde yo quiera
+        jugar.setOpaque(false);
+        
         JButton comenzarP = new JButton("comenzar partida");//boton para comenzar el juego
         comenzarP.setBounds(325, 250, 147, 47);//lugar donde lo quiero colocar
-        jugar.add(comenzarP);//agregar el boton al panel de jugar
+        fondo.add(comenzarP);//agregar el boton al panel de jugar
+        
         panelCentral.add(jugar, "Jugar");//agregar el panel de jugar a el panel central 
-        getContentPane().add(panelCentral);//hacerlo visible 
+        //getContentPane().add(panelCentral);//hacerlo visible 
         
        comenzarP.addActionListener(e -> {
     // Verificar si hay jugadores disponibles (excluyendo al jugador rojo)
@@ -81,9 +92,10 @@ private CardLayout cardLayout;
 });
         
         //agregar los botones de ajustes 
-        JButton logout = new JButton("L");
+        JButton logout = new JButton();
+        logout.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/salir.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         logout.setBounds(680, 470, 50, 50);
-        jugar.add(logout);
+        fondo.add(logout);
         
         logout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -92,9 +104,11 @@ private CardLayout cardLayout;
             }
         });
         
-        JButton JBajustes = new JButton("A");
+        JButton JBajustes = new JButton();
+        JBajustes.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/ajustes.png")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
         JBajustes.setBounds(680, 400, 50, 50);
-        jugar.add(JBajustes);
+        
+        fondo.add(JBajustes);
         segundoPanel();
         JBajustes.addActionListener(e -> cardLayout.show(panelCentral, "ajustes"));
         
@@ -391,7 +405,19 @@ private CardLayout cardLayout;
     
     }
     
-    
+    class FondoPanel extends JPanel{
+  
+      private Image imagen; 
+      
+      @Override
+      public void paintComponent(Graphics g){
+          super.paintComponent(g);
+          imagen = new ImageIcon(getClass().getResource("/imagenes/principal.jpg")).getImage();
+          g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+          
+      
+      }
+  }
     
     
 }
