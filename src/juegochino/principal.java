@@ -93,6 +93,13 @@ private CardLayout cardLayout;
         // Botón de ajustes
         JButton JBajustes = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/ajustes.png")).getImage()));
         JBajustes.setBounds(680, 400, 50, 50);
+        JBajustes.setContentAreaFilled(false); // Elimina el relleno del botón
+        JBajustes.setBorderPainted(false);     // Elimina el borde del botón
+        JBajustes.setFocusPainted(false);      // Elimina el foco visual
+
+        // Hacer que el área de clic sea redonda
+        JBajustes.setOpaque(false); // Asegura que el fondo sea transparente
+        JBajustes.setBounds(680, 400, 50, 50);
         jugar.add(JBajustes); 
 
         // Acción del botón ajustes
@@ -101,6 +108,13 @@ private CardLayout cardLayout;
         // Botón de logout
         JButton logout = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/salir.png")).getImage()));
         logout.setBounds(680, 470, 50, 50);
+        logout.setBounds(680, 470, 50, 50);
+        logout.setContentAreaFilled(false); // Elimina el relleno del botón
+        logout.setBorderPainted(false);     // Elimina el borde del botón
+        logout.setFocusPainted(false);      // Elimina el foco visual
+
+        // Hacer que el área de clic sea redonda
+        logout.setOpaque(false);
         jugar.add(logout);
 
         // Acción del botón logout
@@ -120,8 +134,20 @@ private CardLayout cardLayout;
         // Panel izquierdo con opciones
         JPanel panelIzquierdo = new JPanel(new GridLayout(3, 1));
         JButton btnReportes = new JButton("Reportes");
+        btnReportes.setBackground(Color.decode("#f7f4eb"));
+        btnReportes.setFont(new Font("Tahoma",Font.BOLD,12));
+        btnReportes.setForeground(Color.decode("#80584d"));
+        
         JButton btnMiCuenta = new JButton("Mi Cuenta");
+        btnMiCuenta.setBackground(Color.decode("#f7f4eb"));
+        btnMiCuenta.setFont(new Font("Tahoma",Font.BOLD,12));
+        btnMiCuenta.setForeground(Color.decode("#80584d"));
+        
         JButton regresar = new JButton("Regresar");
+        regresar.setBackground(Color.decode("#f7f4eb"));
+        regresar.setFont(new Font("Tahoma",Font.BOLD,12));
+        regresar.setForeground(Color.decode("#80584d"));
+        
         panelIzquierdo.add(btnReportes);
         panelIzquierdo.add(btnMiCuenta);
         panelIzquierdo.add(regresar);
@@ -129,16 +155,38 @@ private CardLayout cardLayout;
         // Panel derecho con subopciones
         panelDerecho = new JPanel(new CardLayout());
         JPanel reportesSubPanel = new JPanel(new GridLayout(2, 1));
+        
         JButton btnRanking = new JButton("Ranking");
+        btnRanking.setBackground(Color.decode("#f7f4eb"));
+        btnRanking.setFont(new Font("Tahoma",Font.BOLD,24));
+        btnRanking.setForeground(Color.decode("#80584d"));
+        
         JButton btnUltimosLogs = new JButton("Últimos Logs");
+        btnUltimosLogs.setBackground(Color.decode("#f7f4eb"));
+        btnUltimosLogs.setFont(new Font("Tahoma", Font.BOLD, 24));
+        btnUltimosLogs.setForeground(Color.decode("#80584d"));
+        
         reportesSubPanel.add(btnRanking);
         reportesSubPanel.add(btnUltimosLogs);
         panelDerecho.add(reportesSubPanel, "Reportes");
+        
 
         JPanel miCuentaSubPanel = new JPanel(new GridLayout(3, 1));
         JButton btnVerInformacion = new JButton("Ver mis datos");
+        btnVerInformacion.setBackground(Color.decode("#f7f4eb"));
+        btnVerInformacion.setFont(new Font("Tahoma", Font.BOLD, 24));
+        btnVerInformacion.setForeground(Color.decode("#80584d"));
+        
         JButton btnCambiarContrasena = new JButton("Cambiar Contraseña");
+        btnCambiarContrasena.setBackground(Color.decode("#f7f4eb"));
+        btnCambiarContrasena.setFont(new Font("Tahoma", Font.BOLD, 24));
+        btnCambiarContrasena.setForeground(Color.decode("#80584d"));
+        
         JButton btnLogoutCuenta = new JButton("Borrar cuenta");
+        btnLogoutCuenta.setBackground(Color.decode("#f7f4eb"));
+        btnLogoutCuenta.setFont(new Font("Tahoma", Font.BOLD, 24));
+        btnLogoutCuenta.setForeground(Color.decode("#80584d"));
+        
         miCuentaSubPanel.add(btnVerInformacion);
         miCuentaSubPanel.add(btnCambiarContrasena);
         miCuentaSubPanel.add(btnLogoutCuenta);
@@ -221,6 +269,7 @@ private CardLayout cardLayout;
     
     public void ranking(){
     JPanel rankingPanel = new JPanel();
+    rankingPanel.setBackground(Color.decode("#f7f4eb"));
     panelDerecho.add(rankingPanel, "Ranking");
     
     gestorJugadores.ordenarJugadoresPorPuntos();
@@ -249,7 +298,7 @@ private CardLayout cardLayout;
         // Crear la tabla con el modelo
         rankingTable = new JTable(model);
         rankingTable.setFillsViewportHeight(true);
-
+      
         // Mostrar la tabla dentro del panel
         JScrollPane scrollPane = new JScrollPane(rankingTable);
         //panelDerecho.removeAll(); // Limpiar el panel antes de agregar el JTable
@@ -259,39 +308,45 @@ private CardLayout cardLayout;
     }
     
         
-    public void ultimosLogs(){
-    JPanel ultimosLogsPanel = new JPanel();
-        ultimosLogsPanel.add(new JLabel("Aquí están los Últimos Logs"));
-          // Crear un JTextArea para mostrar los logs
-    JTextArea textAreaLogs = new JTextArea(10, 30); // 10 filas, 30 columnas
-    textAreaLogs.setEditable(false); // Los logs no serán editables por el usuario
+    public void ultimosLogs() {
+        JPanel ultimosLogsPanel = new JPanel();
+        ultimosLogsPanel.setBackground(Color.decode("#f7f0e0"));
+        
+        JLabel titleLabel = new JLabel("10 Últimos Logs");
+        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 36));
+        ultimosLogsPanel.add(titleLabel, BorderLayout.NORTH);
+        
+        // Crear un JTextArea para mostrar los logs
+        JTextArea textAreaLogs = new JTextArea(30, 70); // 10 filas, 30 columnas
+        textAreaLogs.setEditable(false); // Los logs no serán editables por el usuario
+        
+        // Obtener los logs del jugador
+        String[] logs = jugador.getLogPartidas();
 
-    // Obtener los logs del jugador
-    String[] logs = jugador.getLogPartidas();
-
-    // Recorrer los logs y añadirlos al JTextArea
-    for (String log : logs) {
-        if (log != null) {
-            textAreaLogs.append(log + "\n");
+        // Recorrer los logs y añadirlos al JTextArea
+        for (String log : logs) {
+            if (log != null) {
+                textAreaLogs.append(log + "\n");
+            }
         }
-    }
 
-    // Colocar el JTextArea dentro de un JScrollPane para permitir desplazamiento
-    JScrollPane scrollPane = new JScrollPane(textAreaLogs);
+        // Colocar el JTextArea dentro de un JScrollPane para permitir desplazamiento
+        JScrollPane scrollPane = new JScrollPane(textAreaLogs);
 
-    // Añadir el scrollPane al panel
-    ultimosLogsPanel.add(scrollPane, BorderLayout.CENTER);
-    panelDerecho.add(ultimosLogsPanel, "Últimos Logs");
+        // Añadir el scrollPane al panel
+        ultimosLogsPanel.add(scrollPane, BorderLayout.CENTER);
+        panelDerecho.add(ultimosLogsPanel, "Últimos Logs");
     }
     
     public void cambiarPassword(){
     JPanel cambiarContrasenaPanel = new JPanel();
+     cambiarContrasenaPanel.setBackground(Color.decode("#f7f0e0"));
     cambiarContrasenaPanel.setLayout(null);
     
     JLabel etiqueta = new JLabel("Cambiar Password");
       cambiarContrasenaPanel.add(etiqueta);//agregar etiqueta al panel
       etiqueta.setBounds(250,50,300,50);//tamaño y posición de la etiqueta
-      etiqueta.setForeground(Color.MAGENTA);//ponerle color a las letras 
+      etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,18));
     
     JLabel vieja = new JLabel("Actual password:");
@@ -316,9 +371,12 @@ private CardLayout cardLayout;
       cambiarContrasenaPanel.add(n);
       n.setBounds(200, 300, 290, 37);
       
-      JButton cambiar = new JButton("CAMBIAR");
-      cambiar.setBounds(240, 400, 180, 46);
-      cambiarContrasenaPanel.add(cambiar);
+        JButton cambiar = new JButton("CAMBIAR");
+        cambiar.setBounds(250, 400, 180, 46);
+        cambiar.setForeground(Color.WHITE);
+        cambiar.setFont(new Font("Tahoma", Font.BOLD, 18));
+        cambiar.setBackground(Color.decode("#a1162b"));
+        cambiarContrasenaPanel.add(cambiar);
       
         cambiar.addActionListener(new ActionListener() {
             @Override
@@ -345,12 +403,14 @@ private CardLayout cardLayout;
     
     public void misDatos(){
     JPanel verDatos = new JPanel();
+    verDatos.setBackground(Color.decode("#f7f0e0"));
         verDatos.setLayout(null);
         JLabel LD = new JLabel("MIS DATOS");
-        LD.setBounds(100, 10, 100, 50);
+        LD.setFont(new Font("Tahoma",Font.BOLD,19));
+        LD.setBounds(100, 10, 200, 50);
         verDatos.add(LD);
         JTextArea info = new JTextArea();
-        info.setBounds(50, 50, 500, 500);
+        info.setBounds(50, 50, 500, 400);
         info.setText(jugador.mostrarInfo());
         verDatos.add(info);
      panelDerecho.add(verDatos, "verDatos");
@@ -358,12 +418,13 @@ private CardLayout cardLayout;
   
     public void borrarCuenta(){
     JPanel borrar = new JPanel();
+    borrar.setBackground(Color.decode("#f7f0e0"));
     borrar.setLayout(null);
   
     JLabel etiqueta = new JLabel("BORRAR CUENTA");
       borrar.add(etiqueta);//agregar etiqueta al panel
       etiqueta.setBounds(250,50,300,50);//tamaño y posición de la etiqueta
-      etiqueta.setForeground(Color.MAGENTA);//ponerle color a las letras 
+      etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,18));
     
     JLabel contra = new JLabel("Password:");
@@ -378,8 +439,12 @@ private CardLayout cardLayout;
       c.setBounds(200, 220, 290, 37);
     
     JButton cambiar = new JButton("BORRAR CUENTA");
-      cambiar.setBounds(260, 300, 180, 46);
+      cambiar.setBounds(260, 300, 150, 45);
+        cambiar.setForeground(Color.WHITE);
+        cambiar.setFont(new Font("Tahoma", Font.BOLD, 12));
+        cambiar.setBackground(Color.decode("#a1162b"));
       borrar.add(cambiar);
+      
       
         cambiar.addActionListener(new ActionListener() {
             @Override

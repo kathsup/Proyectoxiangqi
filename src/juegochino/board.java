@@ -84,7 +84,7 @@ public class board extends JFrame {
 
                 //color
                 if ((i + j) % 2 == 0) {
-                    // Casilla morada
+                    // Casilla beige
                     botones[i][j].setBackground(Color.decode("#f7f4eb"));//#F7F0E0
                 } else {
                     // Casilla rosa     
