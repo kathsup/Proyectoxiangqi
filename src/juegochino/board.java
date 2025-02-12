@@ -61,6 +61,7 @@ public class board extends JFrame {
 
     private void iniciarpanel1() {
         panel1 = new JPanel();
+        panel1.setBackground(Color.decode("#F7F0E0"));
         panel1.setBounds(0, 0, 712, 550); // Panel principal de 712x506
         panel1.setLayout(null); // Layout libre para colocar componentes manualmente
         this.getContentPane().add(panel1);
@@ -84,10 +85,10 @@ public class board extends JFrame {
                 //color
                 if ((i + j) % 2 == 0) {
                     // Casilla morada
-                    botones[i][j].setBackground(Color.decode("#cd99f7"));
+                    botones[i][j].setBackground(Color.decode("#f7f4eb"));//#F7F0E0
                 } else {
                     // Casilla rosa     
-                    botones[i][j].setBackground(Color.decode("#f7a3f5"));
+                    botones[i][j].setBackground(Color.decode("#f2bdde"));
                 }
                 //actions
                 final int fila = i;
@@ -102,9 +103,9 @@ public class board extends JFrame {
 
         JButton retiro = new JButton("Retirarse");//O usar set text 
         retiro.setBounds(533, 60, 135, 30);
-        retiro.setForeground(Color.decode("#ac58f5"));
+        retiro.setForeground(Color.decode("#F7F0E0"));
         retiro.setFont(new Font("Tahoma", Font.BOLD, 18));
-        retiro.setBackground(Color.decode("#00d9ce"));
+        retiro.setBackground(Color.decode("#D23B42"));
         panel1.add(retiro);
 
         ActionListener r = new ActionListener() {
