@@ -4,7 +4,7 @@ package juegochino;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class jugador {
+public final class jugador {
     
     //atributos 
    private String username;
@@ -25,7 +25,7 @@ public class jugador {
     
     
     public String getFechaIngresoFormateada() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Formato de día/mes/año
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return sdf.format(fechaIngreso.getTime());
     }
     
@@ -35,21 +35,21 @@ public class jugador {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "Jugador: " + username;
                
     }
     
     // Getters y setters 
-    public String getUsername() {
+    public final String getUsername() {
         return username;
     }
 
-    public String getPassword() {
+    public final String getPassword() {
         return password;
     }
 
-    public int getPuntos() {
+    public final int getPuntos() {
         return puntos;
     }
 
@@ -78,7 +78,7 @@ public class jugador {
     }
     
 
-    // Método para agregar un log de partida.
+    //  para agregar un log de partida
     public void agregarLogPartida(String resultado) {
         for (int i = 0; i < logPartidas.length; i++) {
             if (logPartidas[i] == null) {

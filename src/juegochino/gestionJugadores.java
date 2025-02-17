@@ -2,7 +2,7 @@ package juegochino;
 
 import javax.swing.JOptionPane;
 
-public class gestionJugadores {
+public class gestionJugadores implements manejarJugadores{
     public jugador[] jugadores;
     public int numjugadores; 
     
@@ -11,15 +11,26 @@ public class gestionJugadores {
         numjugadores = 0;
     }
     
-    public jugador buscarJugador(String usser) {
-        for (jugador j : jugadores) {
-            if (j != null && j.getUsername().equals(usser)) {
-                return j;
-            }
+   
+        private jugador buscarJugador(String usser, int index) {
+
+        if (index >= jugadores.length || jugadores[index] == null) {
+            return null;
         }
-        return null;
+
+        if (jugadores[index].getUsername().equals(usser)) {
+            return jugadores[index];
+        }
+
+        return buscarJugador(usser, index + 1);
+    }
+
+    @Override
+    public jugador buscarJugador(String usser) {
+        return buscarJugador(usser, 0); 
     }
     
+    @Override
     public boolean crearJugador (String usser, String password){
     
         if (usser.isEmpty() || password.isEmpty()) {
@@ -47,13 +58,14 @@ public class gestionJugadores {
     // Crear nuevo jugador
     jugadores[numjugadores] = new jugador(usser, password);
     numjugadores++;
-    //JOptionPane.showMessageDialog(null, "Jugador creado con éxito.");
+    
     
     // Correcto, abre el menú principal
     return true;
         
     }
     
+    @Override
     public jugador logIn(String usser, String password){
     
         jugador j = buscarJugador(usser);
@@ -68,12 +80,13 @@ public class gestionJugadores {
         return j;
         }
         else{
-        JOptionPane.showMessageDialog(null,"Error. usser o password incorrecto. Vuelva a intentarlo.");
+        JOptionPane.showMessageDialog(null,"Error. usuario o contraseña incorrecto. Vuelva a intentarlo.");
         return null;
         }
         
     }
     
+    @Override
     public boolean cambiarP(jugador usser, String vieja, String nueva){
     
         
@@ -107,6 +120,7 @@ public class gestionJugadores {
     
     }
     
+    @Override
     public boolean eliminarCuenta(jugador loggedInUser, String password) {
         
    
@@ -143,8 +157,9 @@ public class gestionJugadores {
     return false;
 }
     
+    @Override
      public void ordenarJugadoresPorPuntos() {
-        // Usamos el algoritmo de burbuja para ordenar de mayor a menor
+        // burbuja
         for (int i = 0; i < numjugadores - 1; i++) {
             for (int j = 0; j < numjugadores - i - 1; j++) {
                 // Si el jugador j tiene menos puntos que el jugador j+1, los intercambiamos
@@ -158,21 +173,34 @@ public class gestionJugadores {
         }
     }
 
-    // Método para mostrar el ranking de jugadores
-    public void mostrarRanking() {
-        // Ordena el arreglo de jugadores por puntos
-        ordenarJugadoresPorPuntos();
-
-        // Mostrar el ranking
-        System.out.println("RANKING DE JUGADORES:");
-        for (int i = 0; i < numjugadores; i++) {
-            if (jugadores[i] != null) {
-                System.out.println((i + 1) + " - " + jugadores[i].getUsername() + " - " + jugadores[i].getPuntos() + " puntos");
-            }
-        }
+    
+    
+     private void mostrarRanking(int index) {
+    // Caso base
+    if (index >= numjugadores) {
+        return; // Detener la recursión
     }
+
+    // si no es null se muestra
+    if (jugadores[index] != null) {
+        System.out.println((index + 1) + " - " + jugadores[index].getUsername() + " - " + jugadores[index].getPuntos() + " puntos");
+    }
+
+    //hace que se repita
+    mostrarRanking(index + 1);
+}
+     
     
-    
+    @Override
+  public void mostrarRanking() {
+    ordenarJugadoresPorPuntos();
+    mostrarRanking(0); 
+}
+
+   
+   
+   
+   
 }
     
     

@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,35 +16,36 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class board extends JFrame {
 
     public JPanel panel1, panel2;
     private JButton[][] botones;
-    public  juego juego;
-    private piezas piezaSeleccionada = null; // para almacenar la pieza seleccionada
+    public juego juego;
+    private piezas piezaSeleccionada = null; // para la pieza seleccionada
     private int filaOrigen, colOrigen;
 
-    private jugador jugadorRojo; // El jugador logueado es el rojo
-    private jugador jugadorNegro; // El jugador oponente será el negro
+    private jugador jugadorRojo; 
+    private jugador jugadorNegro; 
     private gestionJugadores gestorDeJugadores; // Para gestionar los jugadores
+
+    private JTextArea infoJugadores; 
+    private JTextArea infoMovimientos; 
+    JScrollPane scrollPane;
     
-    
-    private JTextArea infoJugadores; // Muestra la info de los jugadores
-    private JTextArea infoMovimientos; // Muestra los movimientos del juego
     
     public board(jugador jugadorLogueado, gestionJugadores gestor) {
         this.setSize(712, 550);
         setTitle("XIANGQI");
         setLocationRelativeTo(null);      //pone la pantalla centrada
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.jugadorRojo = jugadorLogueado; // El jugador logueado es el rojo
+        this.jugadorRojo = jugadorLogueado;
         this.gestorDeJugadores = gestor; // Asignar el gestor de jugadores
-        //juego = new juego(this,jugadorRojo, jugadorNegro);
+        infoMovimientos = new JTextArea();
+        scrollPane = new JScrollPane(infoMovimientos);
         iniciarComponentes();
-        //juego.mostrarTurno();
-
         infoJugadores.append("Jugador Rojo: " + jugadorRojo.getUsername() + "\n");
        
     }
@@ -51,10 +53,6 @@ public class board extends JFrame {
     private void iniciarComponentes() {
         iniciarpanel1();
         iniciarpanel2();
-        //juego.inicializarTablero();
-        //crearBotones();
-        //colocarPiezas();
-        //colocarBtnRetiro();
         crearJComboBoxJugadores();
         colocarInfoPaneles();
     }
@@ -62,15 +60,15 @@ public class board extends JFrame {
     private void iniciarpanel1() {
         panel1 = new JPanel();
         panel1.setBackground(Color.decode("#F7F0E0"));
-        panel1.setBounds(0, 0, 712, 550); // Panel principal de 712x506
-        panel1.setLayout(null); // Layout libre para colocar componentes manualmente
+        panel1.setBounds(0, 0, 712, 550); 
+        panel1.setLayout(null); 
         this.getContentPane().add(panel1);
     }
 
     private void iniciarpanel2() {
         panel2 = new JPanel();
         panel2.setBounds(0, 5, 516, 500);
-        panel2.setLayout(new GridLayout(10, 9)); // Grid de 10x9 para los botones
+        panel2.setLayout(new GridLayout(10, 9)); 
         panel1.add(panel2);
     }
 
@@ -80,25 +78,73 @@ public class board extends JFrame {
             for (int j = 0; j < 9; j++) {
                 //crearlos
                 botones[i][j] = new JButton();
-                botones[i][j].setPreferredSize(new Dimension(80, 80)); // Establece el tamaño de los botones
+                botones[i][j].setPreferredSize(new Dimension(80, 80)); //tamaño de los botones
 
-                //color
-                if ((i + j) % 2 == 0) {
-                    // Casilla beige
-                    botones[i][j].setBackground(Color.decode("#f7f4eb"));//#F7F0E0
-                } else {
-                    // Casilla rosa     
-                    botones[i][j].setBackground(Color.decode("#f2bdde"));
+                //poner el rio
+                if (i == 5) {
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(5, 0, 0, 0, Color.decode("#a0a0a0"))); // Borde superior 
                 }
-                //actions
-                final int fila = i;
-                final int col = j;
-                botones[i][j].addActionListener(e -> manejarClick(fila, col));
-                panel2.add(botones[i][j]);
+
+                //palacio: 
+                if ((i == 0 || i == 1 || i == 2) && j == 3) {
+                    int top = (i == 0) ? 4 : 0; 
+                    int bottom = (i == 2) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(top, 4, bottom, 0, Color.decode("#a0a0a0"))); 
+                } 
+                else if (i == 2 && (j == 3 || j == 4 || j == 5)) {
+                    int left = (j == 3) ? 4 : 0; 
+                    int right = (j == 5) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(0, left, 4, right, Color.decode("#a0a0a0"))); 
+                } 
+                else if ((i == 0 || i == 1 || i == 2) && j == 5) {
+                    int top = (i == 0) ? 4 : 0; 
+                    int bottom = (i == 2) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(top, 0, bottom, 4, Color.decode("#a0a0a0"))); 
+                } 
+                else if (i == 0 && (j == 3 || j == 4 || j == 5)) {
+                    int right = (j == 5) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(4, 0, 0, right, Color.decode("#a0a0a0"))); 
+                }
+                
+                //palacio de abajo
+                else if ((i == 7 || i == 8 || i == 9) && j == 3) {
+                    int top = (i == 7) ? 4 : 0; 
+                    int bottom = (i == 9) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(top, 4, bottom, 0, Color.decode("#a0a0a0"))); 
+                } 
+                else if (i == 9 && (j == 3 || j == 4 || j == 5)) {
+                    int left = (j == 3) ? 4 : 0; 
+                    int right = (j == 5) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(0, left, 4, right, Color.decode("#a0a0a0"))); 
+                } 
+                else if ((i == 7 || i == 8 || i == 9) && j == 5) {
+                    int top = (i == 7) ? 4 : 0; 
+                    int bottom = (i == 9) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(top, 0, bottom, 4, Color.decode("#a0a0a0"))); 
+                } 
+                else if (i == 7 && (j == 3 || j == 4 || j == 5)) {
+                    int right = (j == 5) ? 4 : 0; 
+                    botones[i][j].setBorder(BorderFactory.createMatteBorder(4, 0, 0, right, Color.decode("#a0a0a0"))); 
+                }
+
+                    //color
+                    if ((i + j) % 2 == 0) {
+                        // Casilla beige
+                        botones[i][j].setBackground(Color.decode("#f7f4eb"));//#F7F0E0
+                    } else {
+                        // Casilla rosa     
+                        botones[i][j].setBackground(Color.decode("#f2bdde"));
+                    }
+                    
+                    //actions
+                    final int fila = i;
+                    final int col = j;
+                    botones[i][j].addActionListener(e -> manejarClick(fila, col));
+                    panel2.add(botones[i][j]);
+                }
             }
         }
-    }
-
+    
     private void colocarBtnRetiro() {
 
         JButton retiro = new JButton("Retirarse");//O usar set text 
@@ -128,11 +174,11 @@ public class board extends JFrame {
     }
     
     private void crearJComboBoxJugadores() {
-    // Crear el JComboBox para seleccionar el jugador oponente (jugador negro)
+    //JComboBox para seleccionar el jugador oponente 
     JComboBox<jugador> listaJugadores = new JComboBox<>();
     listaJugadores.setBounds(533, 100, 135, 30);
 
-    // Llenar el JComboBox con los jugadores disponibles (excluyendo al jugador rojo)
+    // Llenar el JComboBox con los jugadores disponibles no al jugador rojo
     for (jugador j : gestorDeJugadores.jugadores) {
         if (j != null && !j.equals(jugadorRojo)) {
             listaJugadores.addItem(j);
@@ -140,59 +186,62 @@ public class board extends JFrame {
     }
 
     if (listaJugadores.getItemCount() == 0) {
-        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles. Regresando al menú principal.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
-        cerrar(); // Método para cerrar la ventana actual y regresar al menú principal
-        return; // Salir del método
+        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
+        cerrar(); 
+        return; 
     }
     
     // Añadir la lista al panel
     panel1.add(listaJugadores);
 
-    // Manejar la selección del oponente
+    //  la selección del oponente
     listaJugadores.addActionListener(e -> {
         jugadorNegro = (jugador) listaJugadores.getSelectedItem();
         if (jugadorNegro != null) {
-            // Mostrar el jugador negro en el JTextArea de información
             infoJugadores.append("Jugador Negro: " + jugadorNegro.getUsername() + "\n");
-            // Desactivar el JComboBox para evitar cambios de jugador
+            // luego de elegirlo se desactiva para que no cambien al jugador 
             listaJugadores.setEnabled(false);
 
-            // Crear el objeto juego después de seleccionar el jugador negro
+            // Crear el objeto juego después de seleccionar el jugador negro, porque si no da error porque jujador negro era null
             this.juego = new juego(this, jugadorRojo, jugadorNegro);
             this.juego.inicializarTablero();
             this.juego.mostrarTurno();
-            crearBotones(); // Crea los botones después de inicializar el juego
+            
+            crearBotones(); 
             colocarPiezas();
             colocarBtnRetiro();
-            //nuevoJuego.iniciarJuego(); // Si tienes algún método para comenzar el juego
         }
     });
 }
 
     private void colocarInfoPaneles() {
-        // JTextArea para mostrar la info de los jugadores
+        //mostrar los jugadores
         infoJugadores = new JTextArea();
         infoJugadores.setBounds(533, 150, 150, 100);
         infoJugadores.setEditable(false);
         panel1.add(infoJugadores);
-
-        
     }
     
     public void mostrarEnInfoMovimientos(String mensaje) {
-        // JTextArea para mostrar los movimientos del juego
-        infoMovimientos = new JTextArea();
-        infoMovimientos.setBounds(533, 260, 150, 200);
-        infoMovimientos.setEditable(false);
-        panel1.add(infoMovimientos);
-        infoMovimientos.append(mensaje + "\n"); // Agregar el mensaje al JTextArea
-    }
+        // area para mostrar movimientos y etc
 
+        infoMovimientos.setEditable(false);
+        infoMovimientos.setLineWrap(true);
+        infoMovimientos.setWrapStyleWord(true);
+        scrollPane.setBounds(533, 260, 150, 200); 
+        panel1.add(scrollPane);
+        infoMovimientos.append(mensaje + "\n\n"); 
+
+        // el panel se actualiza
+        infoMovimientos.revalidate();
+        infoMovimientos.repaint();
+    }
+    
     private void colocarPiezas() {
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 9; j++) {
-                piezas pieza = juego.getPieza(i, j); // Obtener la pieza lógica
+                piezas pieza = juego.getPieza(i, j); // Obtener la pieza 
                 if (pieza != null) {
                     if (pieza.esRojo()) {
                         // Piezas rojas
@@ -239,17 +288,17 @@ public class board extends JFrame {
     }
 
     public void manejarClick(int fila, int col) {
-        //juego.mostrarTurno();
-        piezas piezaClicada = juego.getPieza(fila, col); // Obtener la pieza en la casilla clicada
-        //juego.mostrarTurno();
+        
+        piezas piezaClicada = juego.getPieza(fila, col); // Obtener la pieza en la casilla seleccionada
+        
         
         if (jugadorNegro == null) {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona al jugador negro antes de realizar movimientos.", "Jugador Negro no seleccionado", JOptionPane.WARNING_MESSAGE);
-            return; // Salir del método si no se ha seleccionado el jugador negro
+            return; // Salir si no se ha seleccionado el jugador negro
         }
         
         if (piezaSeleccionada == null) {
-            // Si no hay pieza seleccionada, selecciona la pieza
+            // Si no hay pieza seleccionada, se selecciona la pieza
             if (piezaClicada != null) {
                 piezaSeleccionada = piezaClicada;
                 filaOrigen = fila;
@@ -257,50 +306,19 @@ public class board extends JFrame {
                 infoMovimientos.append("Pieza seleccionada en: " + fila + ", " + col + "\n");
             }
         } else {
-            // Si ya hay una pieza seleccionada, intenta moverla
+            // Si ya hay una pieza seleccionada, se intenta moverla
             if (juego.moverPieza(filaOrigen, colOrigen, fila, col)) {
-                // movimiento valido, actualizar la visualización
+                // movimiento valido, actualizar el tablero
                 colocarPiezas(); // Actualizar los íconos
-            } //else {
-            // System.out.println("Movimiento no válido.");
-            // }
+            } 
             piezaSeleccionada = null; // Reiniciar la selección
         }
     }
     
     public void cerrar() {
-        dispose(); // Cierra la ventana del tablero
-         
+        dispose(); 
          new principal(gestorDeJugadores, jugadorRojo).setVisible(true); 
     }
 
-    public static void main(String[] args) {
-        // Crear el gestor de jugadores y algunos jugadores ficticios para probar
-        gestionJugadores gestorDeJugadores = new gestionJugadores();
-        
-        // Agregar algunos jugadores al sistema (esto sería parte de tu lógica real)
-        gestorDeJugadores.crearJugador("sandra", "12345");
-        gestorDeJugadores.crearJugador("patricia", "12345");
-        gestorDeJugadores.crearJugador("carla", "12345");
-
-        // Simular login del jugador rojo
-        jugador jugadorRojo = gestorDeJugadores.logIn("carla", "12345");
-        if (jugadorRojo != null) {
-            // Si el login es exitoso, se inicia el tablero con el jugador rojo
-            // Al crear el tablero, se pasará el jugador logueado (jugador rojo) y el gestor de jugadores
-            board tablero = new board(jugadorRojo, gestorDeJugadores);
-            tablero.setVisible(true); // Mostrar el tablero
-        } else {
-            System.out.println("Error en el login");
-        }
-    }
 }
 
-//COSAS A REVISAR 
-//Movimientos de cada pieza, captura de cada pieza 
-//QUE NO COMIENCE EL JUEGO SI NO HAY OTRO JUGADOR SELECCIONADO
-//clase y metodos finales(1)
-//2 recursivas
-//una interfaz
-//NO EXCEPTIONS
-//

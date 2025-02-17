@@ -7,30 +7,34 @@ public class caballo extends piezas {
     }
 
     @Override
+    public String getNombre(){
+    return "Caballo";
+    }
+    
+    @Override
     public boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tablero){
     
         int diferenciaX = Math.abs(nuevaX - x);
         int diferenciaY = Math.abs(nuevaY - y);
 
-        // 1. Verificar que el movimiento sea en "L": (2,1) o (1,2)
+        // 1. Verificar que  movimiento sea en L: (2,1) o (1,2)
         if ((diferenciaX == 2 && diferenciaY == 1) || (diferenciaX == 1 && diferenciaY == 2)) {
-            
             
             if (diferenciaX == 2) {
                 
                 int pivoteX = (nuevaX + x) / 2; 
                 if (tablero[pivoteX][y] != null) {
-                    return false; // El pivote está ocupado, movimiento no válido
+                    return false; // revisar si tiene una pieza enmedio, movimiento no permitido
                 }
             } else if (diferenciaY == 2) {
                 
                 int pivoteY = (nuevaY + y) / 2; 
                 if (tablero[x][pivoteY] != null) {
-                    return false; // El pivote está ocupado, movimiento no válido
+                    return false; // revisar si tiene una pieza enmedio, movimiento no permitido
                 }
             }
             
-            // Si pasa todas las verificaciones, el movimiento es válido
+            // todo valido
             return true;
         }
 

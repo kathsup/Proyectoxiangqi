@@ -51,11 +51,11 @@ private CardLayout cardLayout;
         panelCentral.setLayout(cardLayout);
         panelCentral.setOpaque(false); // Fondo transparente para que se vea el fondo
 
-        fondo.setLayout(new BorderLayout()); // Asegurar un buen layout para agregar componentes
+        fondo.setLayout(new BorderLayout()); // Asegurar un border layout para agregar componentes
         fondo.add(panelCentral, BorderLayout.CENTER); // Agregar el panel central al fondo
         
-        primerPanel(); // Inicializa el primer panel (jugar)
-        segundoPanel(); // Inicializa el segundo panel (ajustes)
+        primerPanel(); // Inicializa el primer panel - jugar
+        segundoPanel(); // Inicializa el segundo panel - ajustes
     }
 
     public void primerPanel() {
@@ -63,14 +63,14 @@ private CardLayout cardLayout;
         jugar.setLayout(null); // Para usar setBounds
         jugar.setOpaque(false); // Fondo transparente
 
-        // Botón para comenzar el juego
+        // Btn para comenzar el juego
         JButton comenzarP = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/INICIAR .png")).getImage()));
         comenzarP.setBounds(325, 250, 147, 47); 
         jugar.add(comenzarP); // Agregar al panel jugar
         
-        // Acción del botón comenzar
+        
         comenzarP.addActionListener(e -> {
-    // Verificar si hay jugadores disponibles (excluyendo al jugador rojo)
+    // Verificar si hay jugadores disponibles eexcluyendo al rojo
     boolean hayOponentes = false;
     for (jugador j : gestorJugadores.jugadores) {
         if (j != null && !j.equals(jugador)) {
@@ -80,14 +80,14 @@ private CardLayout cardLayout;
     }
 
     if (!hayOponentes) {
-        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles. Regresando al menú principal.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
-        return; // Salir del método sin abrir el tablero
+        JOptionPane.showMessageDialog(this, "No hay jugadores disponibles.", "Sin Oponentes", JOptionPane.WARNING_MESSAGE);
+        return; // Salir del metodo sin abrir el tablero
     }
 
     // Si hay oponentes, crear el tablero
-    dispose(); // Cerrar la ventana actual
-    board tablero = new board(jugador, gestorJugadores); // Crea el tablero con los jugadores
-    tablero.setVisible(true); // Haz visible el tablero
+    dispose(); 
+    board tablero = new board(jugador, gestorJugadores); 
+    tablero.setVisible(true);
 });
 
         // Botón de ajustes
@@ -102,10 +102,10 @@ private CardLayout cardLayout;
         JBajustes.setBounds(680, 400, 50, 50);
         jugar.add(JBajustes); 
 
-        // Acción del botón ajustes
+        
         JBajustes.addActionListener(e -> cardLayout.show(panelCentral, "ajustes"));
 
-        // Botón de logout
+        // Btn de logout
         JButton logout = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/imagenes/salir.png")).getImage()));
         logout.setBounds(680, 470, 50, 50);
         logout.setBounds(680, 470, 50, 50);
@@ -117,7 +117,7 @@ private CardLayout cardLayout;
         logout.setOpaque(false);
         jugar.add(logout);
 
-        // Acción del botón logout
+        
         logout.addActionListener(e -> {
             dispose(); 
             new inicio(gestorJugadores).setVisible(true);
@@ -222,7 +222,7 @@ private CardLayout cardLayout;
             cl.show(panelDerecho, "Mi Cuenta");
         });
 
-        // Acciones para las subopciones de "Reportes"
+        // Acciones para las subopciones de reportes
         btnRanking.addActionListener(e -> {
             CardLayout cl = (CardLayout) panelDerecho.getLayout();
             cl.show(panelDerecho, "Ranking");
@@ -237,7 +237,7 @@ private CardLayout cardLayout;
             cardLayout.show(panelCentral, "Jugar");
         });
 
-        // Acciones para las subopciones de "Mi Cuenta"
+        // Acciones para las subopciones de mi cuenta
         btnCambiarContrasena.addActionListener(e -> {
             CardLayout cl = (CardLayout) panelDerecho.getLayout();
             cl.show(panelDerecho, "Cambiar Contraseña");
@@ -254,7 +254,7 @@ private CardLayout cardLayout;
         });
 
        
-        // Configurar el JSplitPane con los paneles izquierdo y derecho
+        // split pane con panel derecho e izq
         splitPane.setLeftComponent(panelIzquierdo);
         splitPane.setRightComponent(panelDerecho);
 
@@ -263,9 +263,6 @@ private CardLayout cardLayout;
 
         panelCentral.add(JPajustes, "ajustes");
     }
-    
-    
-    
     
     public void ranking(){
     JPanel rankingPanel = new JPanel();
@@ -280,7 +277,7 @@ private CardLayout cardLayout;
         // Crear el modelo de la tabla
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        // Llenar el modelo de la tabla con los jugadores ordenados
+        // Llenar la tabla con los jugadores ordenados
         for (int i = 0; i < gestorJugadores.numjugadores; i++) {
             if (gestorJugadores.jugadores[i] != null) {
                 // Agregar una fila por cada jugador
@@ -307,7 +304,6 @@ private CardLayout cardLayout;
         //panelDerecho.repaint();  
     }
     
-        
     public void ultimosLogs() {
         JPanel ultimosLogsPanel = new JPanel();
         ultimosLogsPanel.setBackground(Color.decode("#f7f0e0"));
@@ -316,21 +312,21 @@ private CardLayout cardLayout;
         titleLabel.setFont(new Font("Tahoma", Font.BOLD, 36));
         ultimosLogsPanel.add(titleLabel, BorderLayout.NORTH);
         
-        // Crear un JTextArea para mostrar los logs
-        JTextArea textAreaLogs = new JTextArea(30, 70); // 10 filas, 30 columnas
-        textAreaLogs.setEditable(false); // Los logs no serán editables por el usuario
+        //  JTextArea para mostrar los logs
+        JTextArea textAreaLogs = new JTextArea(30, 70); 
+        textAreaLogs.setEditable(false); 
         
         // Obtener los logs del jugador
         String[] logs = jugador.getLogPartidas();
 
-        // Recorrer los logs y añadirlos al JTextArea
+        // Recorrer y añadirlos al JTextArea
         for (String log : logs) {
             if (log != null) {
                 textAreaLogs.append(log + "\n");
             }
         }
 
-        // Colocar el JTextArea dentro de un JScrollPane para permitir desplazamiento
+       
         JScrollPane scrollPane = new JScrollPane(textAreaLogs);
 
         // Añadir el scrollPane al panel
@@ -343,16 +339,16 @@ private CardLayout cardLayout;
      cambiarContrasenaPanel.setBackground(Color.decode("#f7f0e0"));
     cambiarContrasenaPanel.setLayout(null);
     
-    JLabel etiqueta = new JLabel("Cambiar Password");
-      cambiarContrasenaPanel.add(etiqueta);//agregar etiqueta al panel
-      etiqueta.setBounds(250,50,300,50);//tamaño y posición de la etiqueta
-      etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
+    JLabel etiqueta = new JLabel("Cambiar contraseña");
+      cambiarContrasenaPanel.add(etiqueta);
+      etiqueta.setBounds(250,50,300,50);
+      etiqueta.setForeground(Color.decode("#c7326b"));
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,18));
     
-    JLabel vieja = new JLabel("Actual password:");
-      cambiarContrasenaPanel.add(vieja);//agregar etiqueta al panel
-      vieja.setBounds(200,180,300,50);//tamaño y posición de la etiqueta
-      vieja.setForeground(Color.BLACK);//ponerle color a las letras 
+    JLabel vieja = new JLabel("Contraseña actual:");
+      cambiarContrasenaPanel.add(vieja);
+      vieja.setBounds(200,180,300,50);
+      vieja.setForeground(Color.BLACK);
       vieja.setFont(new Font("Tahoma",Font.BOLD,18));
       
       
@@ -361,10 +357,10 @@ private CardLayout cardLayout;
       v.setBounds(200, 220, 290, 37);
   
       
-      JLabel nueva = new JLabel("New password:");
-      cambiarContrasenaPanel.add(nueva);//agregar etiqueta al panel
-      nueva.setBounds(200,260,300,50);//tamaño y posición de la etiqueta
-      nueva.setForeground(Color.BLACK);//ponerle color a las letras 
+      JLabel nueva = new JLabel("Nueva contraseña:");
+      cambiarContrasenaPanel.add(nueva);
+      nueva.setBounds(200,260,300,50);
+      nueva.setForeground(Color.BLACK);
       nueva.setFont(new Font("Tahoma",Font.BOLD,18));
       
       JTextField n = new JTextField();
@@ -388,11 +384,11 @@ private CardLayout cardLayout;
                 boolean cambiarC = gestorJugadores.cambiarP(jugador, vieja, nueva);
 
                 if (cambiarC) {
-                    JOptionPane.showMessageDialog(null, "Password cambiada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Conttraseña cambiada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     CardLayout cl = (CardLayout) panelDerecho.getLayout();
                     cl.show(panelDerecho, "Mi Cuenta");
                 } else {
-                    //muestra las opciones de error 
+                    //errores
                 }
 
             }
@@ -422,15 +418,15 @@ private CardLayout cardLayout;
     borrar.setLayout(null);
   
     JLabel etiqueta = new JLabel("BORRAR CUENTA");
-      borrar.add(etiqueta);//agregar etiqueta al panel
-      etiqueta.setBounds(250,50,300,50);//tamaño y posición de la etiqueta
-      etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
+      borrar.add(etiqueta);
+      etiqueta.setBounds(250,50,300,50);
+      etiqueta.setForeground(Color.decode("#c7326b"));
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,18));
     
-    JLabel contra = new JLabel("Password:");
-      borrar.add(contra);//agregar etiqueta al panel
-      contra.setBounds(200,180,300,50);//tamaño y posición de la etiqueta
-      contra.setForeground(Color.BLACK);//ponerle color a las letras 
+    JLabel contra = new JLabel("Contraseña: ");
+      borrar.add(contra);
+      contra.setBounds(200,180,300,50);
+      contra.setForeground(Color.BLACK);
       contra.setFont(new Font("Tahoma",Font.BOLD,18));
       
       
@@ -455,9 +451,8 @@ private CardLayout cardLayout;
             boolean borrado = gestorJugadores.eliminarCuenta(jugador, password);
 
             if (borrado) {
-                JOptionPane.showMessageDialog(null, "Se borró la cuenta correctamente.", "Información", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Cierra el menú principal
-                new inicio(gestorJugadores).setVisible(true); // Abre el menú de inicio
+                dispose(); 
+                new inicio(gestorJugadores).setVisible(true); 
             } else {
                 //las otras opciones
             }

@@ -7,6 +7,11 @@ public class elefante extends piezas {
     }
 
     @Override
+    public String getNombre(){
+    return "Elefante";
+    }
+    
+    @Override
  public boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tablero){
  
      // moverse exactamente 2 en diagonal

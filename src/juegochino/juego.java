@@ -4,7 +4,7 @@ import javax.swing.JOptionPane;
 
 public class juego {
 private piezas [][] tablero; 
-private static boolean esTurnoRojo=true;
+public static boolean esTurnoRojo=true;
 private boolean juegoTerminado = false; 
 private boolean retiroPress = false;
 public int reyR =1; 
@@ -17,6 +17,7 @@ public juego(board btab, jugador jugadorRojo, jugador jugadorNegro){
 this.btab=btab;
 this.jugadorRojo = jugadorRojo;
 this.jugadorNegro = jugadorNegro;
+esTurnoRojo = true;
 }
 
 public void inicializarTablero(){
@@ -57,83 +58,130 @@ tablero[9][7]=new caballo(9,7,false);
 tablero[9][8]=new carroGuerra(9,8,false);
 }
 
- // Método para mover una pieza
-    public boolean moverPieza(int filaOrigen, int colOrigen, int filaDestino, int colDestino) {
-        piezas pieza = tablero[filaOrigen][colOrigen]; // Obtener la pieza en la casilla de origen
+ 
+public boolean moverPieza(int filaOrigen, int colOrigen, int filaDestino, int colDestino) {
+    piezas pieza = tablero[filaOrigen][colOrigen]; // Obtener la pieza en posicion inicial
 
-        // verificar si hay una pieza en la posición de origen
-        if (pieza == null) {
-            btab.mostrarEnInfoMovimientos("No hay ninguna pieza en la posición de origen.");
+    // verificar si hay una pieza en la posición de inicio
+    if (pieza == null) {
+        btab.mostrarEnInfoMovimientos("No hay ninguna pieza en la posición de origen.");
+        return false;
+    }
+
+    // Verificar turno
+    if ((esTurnoRojo && !pieza.esRojo()) || (!esTurnoRojo && pieza.esRojo())) {
+        btab.mostrarEnInfoMovimientos("No es tu turno.");
+        return false; 
+    }
+    piezas piezaDestino = tablero[filaDestino][colDestino]; // Obtener la pieza en la casilla de destino
+    String mensajeMovimiento = "La pieza " + pieza.getNombre() + " se mueve de (" + filaOrigen + ", " + colOrigen + ") a (" + filaDestino + ", " + colDestino + ").";
+    
+    if (piezaDestino != null) {
+        // No se pueden capturar piezas del mismo color
+        if (pieza.esRojo() == piezaDestino.esRojo()) {
+            btab.mostrarEnInfoMovimientos("No puedes capturar tus propias piezas.");
+            return false; 
+        }
+        mensajeMovimiento += " Captura a la pieza " + piezaDestino.getNombre() + ".";
+    }
+
+    // Verificar movimiento
+    if (pieza.movimientoValido(filaDestino, colDestino, tablero)) {
+        // Realizar el movimiento
+        tablero[filaDestino][colDestino] = pieza; // Mover la pieza a la nueva posición
+        tablero[filaOrigen][colOrigen] = null; // Vaciar la casilla de origen
+        pieza.setPosicion(filaDestino, colDestino); // Actualizar la posición de la pieza
+
+        // Verificar si se hace gane
+        if (piezaDestino instanceof general && piezaDestino.esRojo()) {
+            reyR = 0;
+            ganar();
+            return true;
+        }
+
+        if (piezaDestino instanceof general && !piezaDestino.esRojo()) {
+            reyN = 0;
+            ganar();
+            return true;
+        }
+
+        // Verificar la visión directa entre los reyes
+        if (!verificarVisionDirecta()) {
+            btab.mostrarEnInfoMovimientos("Movimiento inválido: Los reyes están en visión directa.");
+            // Revertir el movimiento
+            tablero[filaOrigen][colOrigen] = pieza;
+            tablero[filaDestino][colDestino] = piezaDestino; // Si había una pieza en el destino, restaurarla
+            pieza.setPosicion(filaOrigen, colOrigen); // Restaurar la posición de la pieza
             return false;
         }
 
-        if ((esTurnoRojo && !pieza.esRojo()) || (!esTurnoRojo && pieza.esRojo())) {
-        btab.mostrarEnInfoMovimientos("No es tu turno.");
-        return false; // Si no es el turno correcto
-    }
-       
-        piezas piezaDestino = tablero[filaDestino][colDestino]; // pieza en la casilla de destino
-    if (piezaDestino != null) {
-       
-        if (pieza.esRojo() == piezaDestino.esRojo()) {
-             btab.mostrarEnInfoMovimientos("No puedes capturar tus propias piezas.");
-            return false; 
+         btab.mostrarEnInfoMovimientos(mensajeMovimiento);
+         
+        if (!juegoTerminado) {
+            turno(); // Cambiar de turno si el juego no ha terminado
         }
+        return true; // Movimiento exitoso
+    } else {
+        btab.mostrarEnInfoMovimientos("Movimiento no válido.");
+        return false;
     }
-    
-    
-        
-        // Verificar si el movimiento es válido para esta pieza
-        if (pieza.movimientoValido(filaDestino, colDestino, tablero)) {
-            // Realizar el movimiento
-            tablero[filaDestino][colDestino] = pieza; // Mover la pieza a la nueva posición
-            tablero[filaOrigen][colOrigen] = null; // vaciar la casilla de origen
+}
 
-            // Actualizar la posición de la pieza (x, y)
-            pieza.setPosicion(filaDestino, colDestino); 
-            
-            if(piezaDestino instanceof general && piezaDestino.esRojo()){
-                reyR = 0;
-                ganar();
-                return true;
+public boolean verificarVisionDirecta() {
+    int filaReyRojo = -1, colReyRojo = -1;
+    int filaReyNegro = -1, colReyNegro = -1;
+
+    // Buscar la posición del rey rojo y negro en el tablero
+    for (int fila = 0; fila < tablero.length; fila++) {
+        for (int col = 0; col < tablero[fila].length; col++) {
+            piezas pieza = tablero[fila][col];
+            if (pieza instanceof general) {
+                if (pieza.esRojo()) {
+                    filaReyRojo = fila;
+                    colReyRojo = col;
+                } else {
+                    filaReyNegro = fila;
+                    colReyNegro = col;
+                }
             }
-
-            if (piezaDestino instanceof general && !piezaDestino.esRojo()) {
-                reyN = 0;
-                ganar();
-                return true;
-            }
-            
-            if (!juegoTerminado) {
-            turno();
-        }
-            return true; // Movimiento exitoso
-        } else {
-            btab.mostrarEnInfoMovimientos("Movimiento no válido.");
-            return false; 
         }
     }
 
-    //obtener una pieza en una posición dada -para la clase Tablero
+    // Verificar si están en la misma columna
+    if (colReyRojo == colReyNegro) {
+        // Verificar si hay piezas entre los dos reyes
+        int filaInicio = Math.min(filaReyRojo, filaReyNegro) + 1;
+        int filaFin = Math.max(filaReyRojo, filaReyNegro);
+        for (int fila = filaInicio; fila < filaFin; fila++) {
+            if (tablero[fila][colReyRojo] != null) {
+                return true; // Hay una pieza entre los reyes, no hay visión directa
+            }
+        }
+        return false; // No hay piezas entre los reyes, hay visión directa
+    }
+
+    return true; // Los reyes no estan en la misma columna, no tenemos problema
+}
+
+
+    //obtener una pieza en una posición  -para el tablero
     public piezas getPieza(int fila, int col) {
         return tablero[fila][col];
     }
     
     public void turno() {
-      
-       if(!juegoTerminado){
-       esTurnoRojo = !esTurnoRojo; // Alternar el turno
-        mostrarTurno();
-       }
-
+        if (!juegoTerminado) {
+            esTurnoRojo = !esTurnoRojo; // Alternar el turno
+            mostrarTurno();
+        }
     }
     
     public void mostrarTurno() {
         
         if (esTurnoRojo) {
-            btab.mostrarEnInfoMovimientos("Turno de rojo");
+            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorRojo.getUsername());
         } else {
-            btab.mostrarEnInfoMovimientos("Turno de negro");
+            btab.mostrarEnInfoMovimientos("Turno de: "+jugadorNegro.getUsername());
         }
     }
 
@@ -151,7 +199,7 @@ tablero[9][8]=new carroGuerra(9,8,false);
         if(reyN==0){
             JOptionPane.showMessageDialog(null, jugadorRojo.getUsername() + " VENCIO A "+jugadorNegro.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername() + " VENCIO A "+jugadorNegro.getUsername()+". FELICIDADES HAS GANADO 3 PUNTOS");
-            jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorRojo.sumarPuntos(3); 
             jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " le GANO a "+ jugadorNegro.getUsername());
             jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ contra " + jugadorRojo.getUsername());
             juegoTerminado = true;
@@ -160,7 +208,7 @@ tablero[9][8]=new carroGuerra(9,8,false);
         if(esTurnoRojo && retiroPress){
             JOptionPane.showMessageDialog(null, jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " HA GANADO 3 PUNTOS.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
            btab.mostrarEnInfoMovimientos(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " HA GANADO 3 PUNTOS.");
-            jugadorNegro.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorNegro.sumarPuntos(3); 
             jugadorNegro.agregarLogPartida(jugadorRojo.getUsername()+" se ha retirado. "+jugadorNegro.getUsername()+ " ha ganado.");
             jugadorRojo.agregarLogPartida(jugadorRojo.getUsername() + " PERDIÓ por retiro contra " + jugadorNegro.getUsername());
             juegoTerminado = true;
@@ -169,7 +217,7 @@ tablero[9][8]=new carroGuerra(9,8,false);
         if(!esTurnoRojo && retiroPress){
             JOptionPane.showMessageDialog(null, jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " HA GANADO 3 PUNTOS.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             btab.mostrarEnInfoMovimientos(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " HA GANADO 3 PUNTOS.");
-            jugadorRojo.sumarPuntos(3); // Asignar 3 puntos al jugador rojo
+            jugadorRojo.sumarPuntos(3); 
             jugadorRojo.agregarLogPartida(jugadorNegro.getUsername() + " se ha retirado. " + jugadorRojo.getUsername() + " ha ganado.");
             jugadorNegro.agregarLogPartida(jugadorNegro.getUsername() + " PERDIÓ por retiro contra " + jugadorRojo.getUsername() + " por retiro");
             juegoTerminado = true;

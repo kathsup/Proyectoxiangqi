@@ -25,7 +25,7 @@ public class inicio extends JFrame {
      
     
     
-  public inicio(gestionJugadores gestor){//creación de ventana
+  public inicio(gestionJugadores gestor){
   this.gestorJugadores = gestor;
   this.setSize(712,506);//establecer tamaño de la ventana
   setTitle("Menu Inicio"); //titulo 
@@ -57,10 +57,6 @@ public class inicio extends JFrame {
       etiqueta.setForeground(Color.decode("#c7326b"));//ponerle color a las letras 
       etiqueta.setFont(new Font("Tahoma",Font.BOLD,36));
       
-      
-      //para ref de como poner imagenes en un label 
-      //JLabel nombre = new JLabel (new ImageIcon("nombredelArchivo.png)); y se importan las librerias 
-  
   }
   
   private void colocarBotones(){
@@ -85,10 +81,10 @@ public class inicio extends JFrame {
             }
         });
   
-  JButton crearPlayer = new JButton("CREAR PLAYER");//O usar set text 
+  JButton crearPlayer = new JButton("CREAR JUGADOR");//O usar set text 
   crearPlayer.setBounds(240, 240, 214, 46);
   crearPlayer.setForeground(Color.WHITE);
-  crearPlayer.setFont(new Font("Tahoma",Font.BOLD,22));
+  crearPlayer.setFont(new Font("Tahoma",Font.BOLD,20));
   crearPlayer.setBackground(Color.decode("#a1162b"));
   fondo.add(crearPlayer);
   
@@ -114,24 +110,9 @@ public class inicio extends JFrame {
 }
   };
   salir.addActionListener(s);
-  //ImageIcon nombrefoto = new ImageIcon("foto.png");
-  //salir.setIcon(new Image(nombrefoto.getImage().getScaledInstance(ancho,alto,Image.SCALE_SMOOTH)));
   
   }
-  
-  /*public class PanelConFondo extends JPanel {
-        private Image fondo;
-
-        public PanelConFondo(String rutaImagen) {
-            fondo = new ImageIcon(rutaImagen).getImage();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this); // Dibujar la imagen en todo el panel
-        }
-    }*/
+ 
   
   class FondoPanel extends JPanel{
   

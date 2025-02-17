@@ -19,7 +19,6 @@ this.rojo = rojo;
 public abstract boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tablero);
 
 // getters
-
     public int getX() {
         return x;
     }
@@ -28,6 +27,7 @@ public abstract boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tabl
         return y;
     }
 
+    public abstract String getNombre();
     
     //metodos
     public void setPosicion(int x, int y ){

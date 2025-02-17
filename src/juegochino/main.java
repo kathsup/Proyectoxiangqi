@@ -6,9 +6,6 @@ public class main {
         gestionJugadores gestorJugadores = new gestionJugadores();
         inicio in = new inicio(gestorJugadores); 
         in.setVisible(true);
-        
-        
-        
     }
 }
 

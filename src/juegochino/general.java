@@ -7,55 +7,60 @@ public class general extends piezas{
     }
 
     @Override
-    public boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tablero){
+    public String getNombre(){
+    return "Rey";
+    }
     
-        int diferenciaX = Math.abs(nuevaX - x);
-        int diferenciaY = Math.abs(nuevaY - y);
-        
-        //1. verificar que se mueva una en vertical u horizonta. 
-        if((diferenciaX==1 && diferenciaY==0) || (diferenciaY==1&& diferenciaX==0)){
-        
-        //2. verificar que no salga del palacio
-          if(rojo && nuevaX < 0 || nuevaX > 2 || nuevaY < 3 || nuevaY > 5){
-          return false; 
-          } 
-          else if(!rojo && nuevaX < 7 || nuevaX > 9 || nuevaY < 3 || nuevaY > 5){
-          return false;
-          }
-          
-          //3. verifica que los generales no tengan visión directa 
-          if (visionDirecta(nuevaX, nuevaY, tablero)) {
-            return false; // No puede moverse si tiene visión directa con el otro General
-        }
+    
+    @Override
+public boolean movimientoValido(int nuevaX, int nuevaY, piezas[][] tablero) {
+    // Obtener posición actual
+    int actualX = this.getX();
+    int actualY = this.getY();
 
-        // Si pasa todas las verificaciones, el movimiento es valido
-        return true;
+    // Verificar que el movimiento es exactamente horizontal o vertical
+    if (Math.abs(nuevaX - actualX) + Math.abs(nuevaY - actualY) != 1) {
+        return false;  
     }
-        
-        return false;
-        
+
+    // Verificar si el rey está dentro de su palacio
+    if (this.esRojo()) {
+        // Verificar si el nuevo movimiento está dentro del palacio rojo
+        if (nuevaX < 0 || nuevaX > 2 || nuevaY < 3 || nuevaY > 5) {
+            return false;  
+        }
+    } else {
+       // palacio negro
+        if (nuevaX < 7 || nuevaX > 9 || nuevaY < 3 || nuevaY > 5) {
+            return false;  
+        }
     }
-     
-     private boolean visionDirecta(int nuevaX, int nuevaY, piezas[][] tablero) {
-        // Verificar si ambos generales están en la misma columna
-        if (nuevaY == y) {
-            // Buscar el otro general en la misma columna
-            for (int fila = Math.min(nuevaX, x) + 1; fila < Math.max(nuevaX, x); fila++) {
-                if (tablero[fila][y] != null) {
-                    return false; // Hay una pieza entre los generales, no hay visión directa
+
+    // Verificar que no haya una visión directa con el otro rey
+    piezas destino = tablero[nuevaX][nuevaY];
+    if (destino != null && destino instanceof general) {
+        // Si hay un rey enemigo en la misma columna, verificar que haya piezas entre ellos
+        if (actualY == nuevaY) {
+            int minY = Math.min(actualX, nuevaX);
+            int maxY = Math.max(actualX, nuevaX);
+            // Verificar que haya al menos una pieza en la columna
+            for (int i = minY + 1; i < maxY; i++) {
+                if (tablero[i][nuevaY] != null) {
+                    return true;  // Si hay una pieza entre ellos, es válido
                 }
             }
-
-            // Verificar si hay un General oponente en la misma columna sin piezas entre ellos
-            for (int fila = 0; fila < tablero.length; fila++) {
-                if (fila != nuevaX && tablero[fila][nuevaY] instanceof general) {
-                    return true; // Hay visión directa
-                }
-            }
+            return false;  
         }
-
-        return false; // No hay visión directa con el otro General
     }
+
+    
+    if (destino != null && destino.esRojo() == this.esRojo()) {
+        return false;  
+    }
+
+    // Si se cumplen todas las reglas, el movimiento es válido
+    return true;
+}
     
     
     
